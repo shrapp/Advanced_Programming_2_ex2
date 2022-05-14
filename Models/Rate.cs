@@ -4,6 +4,8 @@ namespace Models
 {
     public class Rate
     {
+        public int Id { get; set; } 
+
         [Required]
         public int Number { get; set; }    
 
