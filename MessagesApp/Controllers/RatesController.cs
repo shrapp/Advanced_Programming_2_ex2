@@ -22,8 +22,8 @@ namespace MessagesApp.Controllers
         // GET: Rates
         public async Task<IActionResult> Index()
         {
-              return _context.Movie != null ? 
-                          View(await _context.Movie.ToListAsync()) :
+              return _context.Rate != null ? 
+                          View(await _context.Rate.ToListAsync()) :
                           Problem("Entity set 'MessagesAppContext.Rate'  is null.");
         }
 
