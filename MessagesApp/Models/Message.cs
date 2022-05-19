@@ -4,11 +4,13 @@ namespace MessagesApp.Models
 {
     public class Message
     {
-        [Required]
-        public User From { get; set; }
+        public int Id { get; set; }
 
         [Required]
-        public User To { get; set; }
+        public string From { get; set; }
+
+        [Required]
+        public string To { get; set; }
 
         [Required]
         public DateTime Time { get; set; }

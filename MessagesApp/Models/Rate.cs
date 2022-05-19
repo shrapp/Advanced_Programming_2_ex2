@@ -1,21 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MessagesApp.Models
+namespace WebApplication1.Models
 {
     public class Rate
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
 
         [Required]
-        public int Number { get; set; }
+        [Range(1, 5)]
+        public int NumRate { get; set; }
 
-        public string Text { get; set; }
+        public string? Feedback { get; set; }
 
-
-        public string Name { get; set; }
-
-        [Required]
         public DateTime Time { get; set; }
 
+        [Required]
+        public string RaterName { get; set; }
     }
 }

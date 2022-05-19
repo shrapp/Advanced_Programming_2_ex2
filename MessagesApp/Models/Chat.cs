@@ -5,7 +5,7 @@ namespace MessagesApp.Models
     public class Chat
     {
         [Key]
-        public User User { get; set; }
+        public string User { get; set; }
 
         public string Nickname { get; set; }
 

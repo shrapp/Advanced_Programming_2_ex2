@@ -6,91 +6,91 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MessagesApp.Data;
-using WebApplication1.Models;
+using MessagesApp.Models;
 
 namespace MessagesApp.Controllers
 {
-    public class RatesController : Controller
+    public class ChatsController : Controller
     {
         private readonly MessagesAppContext _context;
 
-        public RatesController(MessagesAppContext context)
+        public ChatsController(MessagesAppContext context)
         {
             _context = context;
         }
 
-        // GET: Rates
+        // GET: Chats
         public async Task<IActionResult> Index()
         {
-              return _context.Rate != null ? 
-                          View(await _context.Rate.ToListAsync()) :
-                          Problem("Entity set 'MessagesAppContext.Rate'  is null.");
+              return _context.Chat != null ? 
+                          View(await _context.Chat.ToListAsync()) :
+                          Problem("Entity set 'MessagesAppContext.Chat'  is null.");
         }
 
-        // GET: Rates/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: Chats/Details/5
+        public async Task<IActionResult> Details(string id)
         {
-            if (id == null || _context.Rate == null)
+            if (id == null || _context.Chat == null)
             {
                 return NotFound();
             }
 
-            var rate = await _context.Rate
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (rate == null)
+            var chat = await _context.Chat
+                .FirstOrDefaultAsync(m => m.User == id);
+            if (chat == null)
             {
                 return NotFound();
             }
 
-            return View(rate);
+            return View(chat);
         }
 
-        // GET: Rates/Create
+        // GET: Chats/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Rates/Create
+        // POST: Chats/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NumRate,Feedback,Time,RaterName")] Rate rate)
+        public async Task<IActionResult> Create([Bind("User,Nickname,Server")] Chat chat)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(rate);
+                _context.Add(chat);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(rate);
+            return View(chat);
         }
 
-        // GET: Rates/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: Chats/Edit/5
+        public async Task<IActionResult> Edit(string id)
         {
-            if (id == null || _context.Rate == null)
+            if (id == null || _context.Chat == null)
             {
                 return NotFound();
             }
 
-            var rate = await _context.Rate.FindAsync(id);
-            if (rate == null)
+            var chat = await _context.Chat.FindAsync(id);
+            if (chat == null)
             {
                 return NotFound();
             }
-            return View(rate);
+            return View(chat);
         }
 
-        // POST: Rates/Edit/5
+        // POST: Chats/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NumRate,Feedback,Time,RaterName")] Rate rate)
+        public async Task<IActionResult> Edit(string id, [Bind("User,Nickname,Server")] Chat chat)
         {
-            if (id != rate.Id)
+            if (id != chat.User)
             {
                 return NotFound();
             }
@@ -99,12 +99,12 @@ namespace MessagesApp.Controllers
             {
                 try
                 {
-                    _context.Update(rate);
+                    _context.Update(chat);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RateExists(rate.Id))
+                    if (!ChatExists(chat.User))
                     {
                         return NotFound();
                     }
@@ -115,49 +115,49 @@ namespace MessagesApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(rate);
+            return View(chat);
         }
 
-        // GET: Rates/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: Chats/Delete/5
+        public async Task<IActionResult> Delete(string id)
         {
-            if (id == null || _context.Rate == null)
+            if (id == null || _context.Chat == null)
             {
                 return NotFound();
             }
 
-            var rate = await _context.Rate
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (rate == null)
+            var chat = await _context.Chat
+                .FirstOrDefaultAsync(m => m.User == id);
+            if (chat == null)
             {
                 return NotFound();
             }
 
-            return View(rate);
+            return View(chat);
         }
 
-        // POST: Rates/Delete/5
+        // POST: Chats/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            if (_context.Rate == null)
+            if (_context.Chat == null)
             {
-                return Problem("Entity set 'MessagesAppContext.Rate'  is null.");
+                return Problem("Entity set 'MessagesAppContext.Chat'  is null.");
             }
-            var rate = await _context.Rate.FindAsync(id);
-            if (rate != null)
+            var chat = await _context.Chat.FindAsync(id);
+            if (chat != null)
             {
-                _context.Rate.Remove(rate);
+                _context.Chat.Remove(chat);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool RateExists(int id)
+        private bool ChatExists(string id)
         {
-          return (_context.Rate?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Chat?.Any(e => e.User == id)).GetValueOrDefault();
         }
     }
 }

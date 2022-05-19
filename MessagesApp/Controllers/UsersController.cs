@@ -6,91 +6,91 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MessagesApp.Data;
-using WebApplication1.Models;
+using MessagesApp.Models;
 
 namespace MessagesApp.Controllers
 {
-    public class RatesController : Controller
+    public class UsersController : Controller
     {
         private readonly MessagesAppContext _context;
 
-        public RatesController(MessagesAppContext context)
+        public UsersController(MessagesAppContext context)
         {
             _context = context;
         }
 
-        // GET: Rates
+        // GET: Users
         public async Task<IActionResult> Index()
         {
-              return _context.Rate != null ? 
-                          View(await _context.Rate.ToListAsync()) :
-                          Problem("Entity set 'MessagesAppContext.Rate'  is null.");
+              return _context.User != null ? 
+                          View(await _context.User.ToListAsync()) :
+                          Problem("Entity set 'MessagesAppContext.User'  is null.");
         }
 
-        // GET: Rates/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: Users/Details/5
+        public async Task<IActionResult> Details(string id)
         {
-            if (id == null || _context.Rate == null)
+            if (id == null || _context.User == null)
             {
                 return NotFound();
             }
 
-            var rate = await _context.Rate
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (rate == null)
+            var user = await _context.User
+                .FirstOrDefaultAsync(m => m.Username == id);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(rate);
+            return View(user);
         }
 
-        // GET: Rates/Create
+        // GET: Users/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Rates/Create
+        // POST: Users/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NumRate,Feedback,Time,RaterName")] Rate rate)
+        public async Task<IActionResult> Create([Bind("Username,Password,Picture")] User user)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(rate);
+                _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(rate);
+            return View(user);
         }
 
-        // GET: Rates/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: Users/Edit/5
+        public async Task<IActionResult> Edit(string id)
         {
-            if (id == null || _context.Rate == null)
+            if (id == null || _context.User == null)
             {
                 return NotFound();
             }
 
-            var rate = await _context.Rate.FindAsync(id);
-            if (rate == null)
+            var user = await _context.User.FindAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
-            return View(rate);
+            return View(user);
         }
 
-        // POST: Rates/Edit/5
+        // POST: Users/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NumRate,Feedback,Time,RaterName")] Rate rate)
+        public async Task<IActionResult> Edit(string id, [Bind("Username,Password,Picture")] User user)
         {
-            if (id != rate.Id)
+            if (id != user.Username)
             {
                 return NotFound();
             }
@@ -99,12 +99,12 @@ namespace MessagesApp.Controllers
             {
                 try
                 {
-                    _context.Update(rate);
+                    _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RateExists(rate.Id))
+                    if (!UserExists(user.Username))
                     {
                         return NotFound();
                     }
@@ -115,49 +115,49 @@ namespace MessagesApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(rate);
+            return View(user);
         }
 
-        // GET: Rates/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: Users/Delete/5
+        public async Task<IActionResult> Delete(string id)
         {
-            if (id == null || _context.Rate == null)
+            if (id == null || _context.User == null)
             {
                 return NotFound();
             }
 
-            var rate = await _context.Rate
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (rate == null)
+            var user = await _context.User
+                .FirstOrDefaultAsync(m => m.Username == id);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(rate);
+            return View(user);
         }
 
-        // POST: Rates/Delete/5
+        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            if (_context.Rate == null)
+            if (_context.User == null)
             {
-                return Problem("Entity set 'MessagesAppContext.Rate'  is null.");
+                return Problem("Entity set 'MessagesAppContext.User'  is null.");
             }
-            var rate = await _context.Rate.FindAsync(id);
-            if (rate != null)
+            var user = await _context.User.FindAsync(id);
+            if (user != null)
             {
-                _context.Rate.Remove(rate);
+                _context.User.Remove(user);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool RateExists(int id)
+        private bool UserExists(string id)
         {
-          return (_context.Rate?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.User?.Any(e => e.Username == id)).GetValueOrDefault();
         }
     }
 }

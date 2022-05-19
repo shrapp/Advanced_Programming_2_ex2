@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApplication1.Models.Rate>
+﻿@model IEnumerable<MessagesApp.Models.Message>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,16 +13,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.NumRate)
+                @Html.DisplayNameFor(model => model.From)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Feedback)
+                @Html.DisplayNameFor(model => model.To)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Time)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RaterName)
+                @Html.DisplayNameFor(model => model.Content)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
             </th>
             <th></th>
         </tr>
@@ -31,16 +34,19 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.NumRate)
+                @Html.DisplayFor(modelItem => item.From)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Feedback)
+                @Html.DisplayFor(modelItem => item.To)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Time)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RaterName)
+                @Html.DisplayFor(modelItem => item.Content)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
