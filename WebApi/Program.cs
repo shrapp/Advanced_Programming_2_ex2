@@ -1,11 +1,11 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using MessagesApp.Data;
+//using Microsoft.EntityFrameworkCore;
+//using Microsoft.Extensions.DependencyInjection;
+//using MessagesApp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<MessagesAppContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MessagesAppContext") ?? throw new InvalidOperationException("Connection string 'MessagesAppContext' not found.")));
+//builder.Services.AddDbContext<MessagesAppContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("MessagesAppContext") ?? throw new InvalidOperationException("Connection string 'MessagesAppContext' not found.")));
 
 // Add services to the container.
 

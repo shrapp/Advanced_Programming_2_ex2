@@ -10,11 +10,11 @@ using MessagesApp.Models;
 
 namespace MessagesApp.Controllers
 {
-    public class ChatsController : Controller
+    public class ContactsController : Controller
     {
         private readonly MessagesAppContext _context;
 
-        public ChatsController(MessagesAppContext context)
+        public ContactsController(MessagesAppContext context)
         {
             _context = context;
         }
@@ -56,7 +56,7 @@ namespace MessagesApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("User,Nickname,Server")] Chat chat)
+        public async Task<IActionResult> Create([Bind("User,Nickname,Server")] Contact chat)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace MessagesApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("User,Nickname,Server")] Chat chat)
+        public async Task<IActionResult> Edit(string id, [Bind("User,Nickname,Server")] Contact chat)
         {
             if (id != chat.User)
             {

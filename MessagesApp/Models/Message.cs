@@ -6,11 +6,14 @@ namespace MessagesApp.Models
     {
         public int Id { get; set; }
 
-        [Required]
-        public string From { get; set; }
+        //[Required]
+        //public User From { get; set; }
+
+        //[Required]
+        //public User To { get; set; }
 
         [Required]
-        public string To { get; set; }
+        public bool Sent { get; set; }
 
         [Required]
         public DateTime Time { get; set; }
