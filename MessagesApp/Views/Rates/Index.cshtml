@@ -2,52 +2,50 @@
 
 @{
     ViewData["Title"] = "Index";
+
+    int sum = 0;
+    int num = 0;
+    float avg = 0;
+    foreach (var item in Model)
+    {
+        sum += item.NumRate;
+        num++;
+    }
+    if (num == 0) avg = 0;
+    else avg = (float)sum / (float)num;
 }
 
-<h1>Index</h1>
+<div class="rates_bar limit_column_height">
+<div class="rates_header">
+    <h1>Rates</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.NumRate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Feedback)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Time)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RaterName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
+    <p>Avarage Rate: @avg</p>
+
+    <p>
+        <a asp-action="Create">Add your own Rate!</a>
+    </p>
+
+</div>
+
+<ul class="rates_list">
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumRate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Feedback)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Time)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RaterName)
-            </td>
-            <td>
+    <li class="rates_list_item d-flex justify-content-between align-items-center container-fluid">
+        <div class="RIL_numRate">
+            @Html.DisplayFor(modelItem => item.NumRate)
+        </div>
+        <div class="rate_in_list_content">
+            <div class="RIL_spaces">
+                <span class="fs-5 RIL_rater_name col-sm-9">@Html.DisplayFor(modelItem => item.RaterName)</span>
+                <span class="RIL_hour_and_time col-sm-3">@Html.DisplayFor(modelItem => item.Time)</span>
+            </div>
+            <span class="RIL_spaces feedback_preview">@Html.DisplayFor(modelItem => item.Feedback)</span>
+            <div>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+            </div>
+        </div>
+    </li>
 }
-    </tbody>
-</table>
+</ul>
+</div>

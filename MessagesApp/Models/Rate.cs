@@ -6,6 +6,7 @@ namespace MessagesApp.Models
     {
         public int Id { get; set; }
 
+        [Display(Name = "Rate")]
         [Required]
         [Range(1, 5)]
         public int NumRate { get; set; }
@@ -14,6 +15,7 @@ namespace MessagesApp.Models
 
         public DateTime Time { get; set; }
 
+        [Display(Name = "Rater's name")]
         [Required]
         public string RaterName { get; set; }
     }
