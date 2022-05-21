@@ -59,11 +59,33 @@ namespace MessagesApp.Services
             if (_users.Count == 0)
             {
                 // add initial users
+                User tester = new User();
+                tester.Username = "1";
+                tester.Password = "1";
+                tester.Contacts = new List<Contact>();
+                _users.Add(tester);
+
                 User u1 = new User();
-                u1.Username = "allice";
+                u1.Username = "alice";
                 u1.Password = "allice";
                 u1.Contacts = new List<Contact>();
                 _users.Add(u1);
+
+                Contact chat_0_1 = new Contact();
+                chat_0_1.User = u1.Username;
+                chat_0_1.Nickname = "alicia";
+                chat_0_1.Messages = new List<Message>();
+                chat_0_1.Server = "localhost:7266"; // not good, but for now
+                tester.Contacts.Add(chat_0_1);
+
+                Message message0 = new Message();
+                message0.Id = 0;
+                message0.Sent = true;
+                message0.Content = "hi you";
+                message0.Time = DateTime.Now;
+                message0.Type = "text";
+
+                chat_0_1.Messages.Add(message0);
 
                 User u2 = new User();
                 u2.Username = "bob";
@@ -75,8 +97,8 @@ namespace MessagesApp.Services
                 chat_1_2.User = u2.Username;
                 chat_1_2.Nickname = "bobby";
                 chat_1_2.Messages = new List<Message>();
-                chat_1_2.Server = "localhost:7204"; // not good, but for now
-                u1.Contacts.Add(chat_1_2);
+                chat_1_2.Server = "localhost:7265"; // not good, but for now
+                tester.Contacts.Add(chat_1_2);
 
                 Message message_1_2 = new Message();
                 message_1_2.Id = 1;
@@ -102,7 +124,7 @@ namespace MessagesApp.Services
         {
             List<Json_Contact> ret = new List<Json_Contact>();
             List<Contact> contacts = GetContacts(username);
-            if (contacts == null) { return ret; }
+            if (contacts == null) { return null; }
             foreach (Contact contact in contacts)
             {
                 ret.Add(GetJsonContact(contact));
@@ -203,7 +225,21 @@ namespace MessagesApp.Services
             return true;
         }
 
-        public bool ApiAddMessage(string username, string contactName, string newMessage, int? messageid)
+        public bool ApiEditContact(string username, string id, Json_Contact Contact)
+        {
+            if (Contact == null) { return false; }
+            User user = _users.Find(x => x.Username == username);
+            if (user == null) { return false; }
+            Contact contact = user.Contacts.Find(x => x.User == id);
+            if (contact == null) { return false; }
+            user.Contacts.Remove(contact);
+            contact.Nickname = Contact.Name;
+            contact.Server = Contact.Server;
+            user.Contacts.Add(contact);
+            return true;
+        }
+
+        public bool ApiAddMessage(string username, string contactName, string newMessage, bool sent)
         {
 
             if (newMessage == null) { return false; }
@@ -211,17 +247,29 @@ namespace MessagesApp.Services
             if (contact == null) { return false; }
 
             Message message = new Message();
-
-            if (messageid.HasValue) { message.Id = (int)messageid; }
-            else {
-                if (contact.Messages.Count > 0) { message.Id = contact.Messages.Last().Id + 1; } // might be wrong!!!!!!!!
-                else { message.Id = 0; }
-            }
-
+            if (contact.Messages.Count > 0) { message.Id = contact.Messages.Last().Id + 1; } // might be wrong!!!!!!!!
+            else { message.Id = 0; }
+            
             message.Content = newMessage;
-            message.Sent = true;
+            message.Sent = sent;
             message.Time = DateTime.Now;
             message.Type = "text";
+            contact.Messages.Add(message);
+            return true;
+        }
+
+        public bool ApiEditMessage(string username, string contactName, string newMessage, int id)
+        {
+
+            if (newMessage == null) { return false; }
+            Contact contact = GetContact(username, contactName);
+            if (contact == null) { return false; }
+
+            Message message = contact.Messages.Find(x => x.Id == id);
+            if (message == null) { return false; }
+
+            contact.Messages.Remove(message);   
+            message.Content = newMessage;
             contact.Messages.Add(message);
             return true;
         }

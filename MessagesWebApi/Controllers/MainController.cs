@@ -21,27 +21,29 @@ namespace MessagesWebApi.Controllers
         AppService service = AppService.CreateAppService();
 
         [HttpGet("contacts", Name = "GetContacts")]
-        public List<Json_Contact> GetContacts(string user)
+        public IActionResult GetContacts(string user)
         {
             // return all contacts of the connected user in JSON
-            if (service.ApiGetContacts(user).Count > 0)
+            List<Json_Contact> contacts = service.ApiGetContacts(user);
+
+            if (contacts != null)
             {
-                return service.ApiGetContacts(user);
+                return Ok(contacts);
             }
             // find a way to send error
-            return null;
+            return NotFound();
         }
 
         [HttpGet("contacts/{id}", Name = "GetContact")]
-        public Json_Contact? GetContact(string user, string id)
+        public IActionResult GetContact(string user, string id)
         {
-            if(service.ApiGetContact(user, id) == null)
+            Json_Contact contact = service.ApiGetContact(user, id);
+
+            if (contact == null)
             {
-                // find a way to send error
-                return null;
+                return NotFound();
             }
-            // return the specific contact of the connected user in JSON
-            return service.ApiGetContact(user, id);
+            return Ok(contact);
         }
 
         [HttpPost("contacts", Name = "PostContact")]
@@ -49,7 +51,7 @@ namespace MessagesWebApi.Controllers
                   [FromBody] Json_Contact contact)
         {
             bool s = service.ApiAddContact(user, contact);
-            if (s) { return Ok(); };
+            if (s) { return StatusCode(201); };
             return BadRequest();
         }
 
@@ -58,17 +60,17 @@ namespace MessagesWebApi.Controllers
                   [FromBody] Json_Contact contact)
         {
             contact.Id = id;
-            bool s = service.ApiAddContact(user, contact);
-            if (s) { return Ok(); };
-            return BadRequest();
+            bool s = service.ApiEditContact(user,id, contact);
+            if (s) { return StatusCode(204); };
+            return NotFound();
         }
 
         [HttpDelete("contacts/{id}", Name = "DeleteContact")]
         public IActionResult DeleteContact(string user, string id)
         {
             bool s = service.ApiDeleteContact(user, id);
-            if (s) { return Ok(); };
-            return BadRequest();
+            if (s) { return StatusCode(204); };
+            return NotFound();
         }
 
         [HttpPost("invitations", Name = "Invitations")]
@@ -77,57 +79,61 @@ namespace MessagesWebApi.Controllers
             Json_Contact contact = new Json_Contact();
             contact.Server = data.server;
             contact.Id = data.from;
+            contact.Name = data.from;
             bool s = service.ApiAddContact(data.to, contact);
-            if (s) { return Ok(); };
+            if (s) { return StatusCode(201); };
             return BadRequest();
         }
 
         [HttpPost("transfer", Name = "Transfer")]
         public IActionResult Transfer([FromBody] ApiFormat data)
         {
-            bool s = service.ApiAddMessage(data.from, data.to, data.content, null);
-            if (s) { return Ok(); };
+            bool s = service.ApiAddMessage(data.to, data.from, data.content, false);
+            if (s) { return StatusCode(201); };
             return BadRequest();
         }
 
         [HttpGet("contacts/{id}/messages", Name = "GetMessages")]
-        public List<Json_Message> GetMessages(string user, string id)
+        public IActionResult GetMessages(string user, string id)
         {
             // return all Messages of the connected user in JSON
-            if (service.ApiGetMessages(user, id).Count > 0)
+            List<Json_Message> ret = service.ApiGetMessages(user, id);
+
+            if (ret == null)
             {
-                return service.ApiGetMessages(user, id);
+                return NotFound();
             }
             // find a way to send error
-            return null;
+            return Ok(ret);
         }
 
         [HttpGet("contacts/{contact}/messages/{id}", Name = "GetMessage")]
-        public Json_Message GetMessage(string user, string contact ,int id)
+        public IActionResult GetMessage(string user, string contact ,int id)
         {
-            if (service.ApiGetMessage(user,contact, id) == null)
+            Json_Message ret = service.ApiGetMessage(user, contact, id);
+
+            if (ret == null)
             {
-                // find a way to send error
-                return null;
+                return NotFound();
             }
             // return the specific contact of the connected user in JSON
-            return service.ApiGetMessage(user, contact, id);
+            return Ok(ret);
         }
 
         [HttpDelete("contacts/{contact}/messages/{id}", Name = "DeleteMessage")]
         public IActionResult DeleteMessage(string user, string contact, int id)
         {
             bool s = service.ApiDeleteMessage(user,contact, id);
-            if (s) { return Ok(); };
-            return BadRequest();
+            if (s) { return StatusCode(204); };
+            return NotFound();
         }
 
         [HttpPost("contacts/{id}/messages", Name = "PostMessage")]
         public IActionResult PostMessage(string user, string id,
                   [FromBody] ApiFormat content)
         {
-            bool s = service.ApiAddMessage(user, id, content.content, null);
-            if (s) { return Ok(); };
+            bool s = service.ApiAddMessage(user, id, content.content, true);
+            if (s) { return StatusCode(201); };
             return BadRequest();
         }
 
@@ -135,8 +141,8 @@ namespace MessagesWebApi.Controllers
         public IActionResult PostMessage(string user, string contact, int id,
                   [FromBody] ApiFormat content)
         {
-            bool s = service.ApiAddMessage(user, contact, content.content, id);
-            if (s) { return Ok(); };
+            bool s = service.ApiEditMessage(user, contact, content.content, id);
+            if (s) { return StatusCode(204); };
             return BadRequest();
         }
     }
