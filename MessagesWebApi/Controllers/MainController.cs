@@ -1,6 +1,8 @@
-﻿using MessagesWebApi.Models;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MessagesApp.Services;
+using MessagesApp.Models;
+
 
 namespace MessagesWebApi.Controllers
 {
@@ -8,96 +10,134 @@ namespace MessagesWebApi.Controllers
     [ApiController]
     public class MainController : ControllerBase
     {
-        [HttpGet("contacts", Name = "GetContacts")]
-        public IActionResult GetContacts(string user)
+        public class ApiFormat
         {
-            
+            public string? from { get; set; }
+            public string? to { get; set; }
+            public string? content { get; set; }
+            public string? server { get; set; }
+        }
+
+        AppService service = AppService.CreateAppService();
+
+        [HttpGet("contacts", Name = "GetContacts")]
+        public List<Json_Contact> GetContacts(string user)
+        {
             // return all contacts of the connected user in JSON
-            return Ok();
+            if (service.ApiGetContacts(user).Count > 0)
+            {
+                return service.ApiGetContacts(user);
+            }
+            // find a way to send error
+            return null;
         }
 
         [HttpGet("contacts/{id}", Name = "GetContact")]
-        public IActionResult GetContact(string user, string id)
+        public Json_Contact? GetContact(string user, string id)
         {
-
+            if(service.ApiGetContact(user, id) == null)
+            {
+                // find a way to send error
+                return null;
+            }
             // return the specific contact of the connected user in JSON
-            return Ok();
+            return service.ApiGetContact(user, id);
         }
 
         [HttpPost("contacts", Name = "PostContact")]
         public IActionResult AddContact(string user,
-                  [FromBody] Json_Contact inputModel)
+                  [FromBody] Json_Contact contact)
         {
-            // return created status
-            return Ok();
+            bool s = service.ApiAddContact(user, contact);
+            if (s) { return Ok(); };
+            return BadRequest();
         }
 
         [HttpPut("contacts/{id}", Name = "PutContact")]
         public IActionResult PutContact(string user, string id,
-                  [FromBody] Json_Contact inputModel)
+                  [FromBody] Json_Contact contact)
         {
-            // return created status
-            return Ok();
+            contact.Id = id;
+            bool s = service.ApiAddContact(user, contact);
+            if (s) { return Ok(); };
+            return BadRequest();
         }
 
         [HttpDelete("contacts/{id}", Name = "DeleteContact")]
         public IActionResult DeleteContact(string user, string id)
         {
-            // return delete status
-            return Ok();
+            bool s = service.ApiDeleteContact(user, id);
+            if (s) { return Ok(); };
+            return BadRequest();
         }
 
         [HttpPost("invitations", Name = "Invitations")]
-        public IActionResult Invitations([FromBody] Json_Contact inputModel)
+        public IActionResult Invitations([FromBody] ApiFormat data)
         {
-            // return ?????
-            return Ok();
+            Json_Contact contact = new Json_Contact();
+            contact.Server = data.server;
+            contact.Id = data.from;
+            bool s = service.ApiAddContact(data.to, contact);
+            if (s) { return Ok(); };
+            return BadRequest();
         }
 
         [HttpPost("transfer", Name = "Transfer")]
-        public IActionResult Transfer([FromBody] Json_Contact inputModel)
+        public IActionResult Transfer([FromBody] ApiFormat data)
         {
-            // return ?????
-            return Ok();
+            bool s = service.ApiAddMessage(data.from, data.to, data.content, null);
+            if (s) { return Ok(); };
+            return BadRequest();
         }
 
         [HttpGet("contacts/{id}/messages", Name = "GetMessages")]
-        public IActionResult GetMessages(string user, string id)
+        public List<Json_Message> GetMessages(string user, string id)
         {
-
-            // return all messages of the connected user and contact in JSON
-            return Ok();
+            // return all Messages of the connected user in JSON
+            if (service.ApiGetMessages(user, id).Count > 0)
+            {
+                return service.ApiGetMessages(user, id);
+            }
+            // find a way to send error
+            return null;
         }
 
         [HttpGet("contacts/{contact}/messages/{id}", Name = "GetMessage")]
-        public IActionResult GetMessage(string user, string contact ,string id)
+        public Json_Message GetMessage(string user, string contact ,int id)
         {
-
-            // return the message of the connected user and contact in JSON
-            return Ok();
+            if (service.ApiGetMessage(user,contact, id) == null)
+            {
+                // find a way to send error
+                return null;
+            }
+            // return the specific contact of the connected user in JSON
+            return service.ApiGetMessage(user, contact, id);
         }
 
         [HttpDelete("contacts/{contact}/messages/{id}", Name = "DeleteMessage")]
-        public IActionResult DeleteMessage(string user, string contact, string id)
+        public IActionResult DeleteMessage(string user, string contact, int id)
         {
-            // return delete status
-            return Ok();
+            bool s = service.ApiDeleteMessage(user,contact, id);
+            if (s) { return Ok(); };
+            return BadRequest();
         }
 
         [HttpPost("contacts/{id}/messages", Name = "PostMessage")]
         public IActionResult PostMessage(string user, string id,
-                  [FromBody] string content)
+                  [FromBody] ApiFormat content)
         {
-            // return created status
-            return Ok();
+            bool s = service.ApiAddMessage(user, id, content.content, null);
+            if (s) { return Ok(); };
+            return BadRequest();
         }
 
         [HttpPut("contacts/{contact}/messages/{id}", Name = "PutMessage")]
-        public IActionResult PostMessage(string user, string contact, string id,
-                  [FromBody] string content)
+        public IActionResult PostMessage(string user, string contact, int id,
+                  [FromBody] ApiFormat content)
         {
-            // return created status
-            return Ok();
+            bool s = service.ApiAddMessage(user, contact, content.content, id);
+            if (s) { return Ok(); };
+            return BadRequest();
         }
     }
 }
