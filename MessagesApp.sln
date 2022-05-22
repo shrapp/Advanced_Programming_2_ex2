@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessagesApp", "MessagesApp\MessagesApp.csproj", "{33AA108A-230C-4604-AE33-887247D39A49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagesWebApi", "MessagesWebApi\MessagesWebApi.csproj", "{9C5F2E75-DBEA-44A5-97F0-4C43BAB851BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessagesWebApi", "MessagesWebApi\MessagesWebApi.csproj", "{9C5F2E75-DBEA-44A5-97F0-4C43BAB851BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

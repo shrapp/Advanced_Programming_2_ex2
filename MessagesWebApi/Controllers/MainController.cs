@@ -20,6 +20,23 @@ namespace MessagesWebApi.Controllers
 
         AppService service = AppService.CreateAppService();
 
+        [HttpPost("login", Name = "Login")]
+        public IActionResult Login([FromBody] ApiFormat contact)
+        {
+            bool s = service.ApiLogin(contact.from, contact.content);
+            if (s) { return Ok(); };
+            return BadRequest();
+        }
+
+        [HttpPost("register", Name = "Register")]
+        public IActionResult Register([FromBody] ApiFormat contact)
+        {
+            bool s = service.ApiAddUser(contact.from, contact.content);
+            if (s) { return StatusCode(200); };
+            return BadRequest();
+        }
+
+
         [HttpGet("contacts", Name = "GetContacts")]
         public IActionResult GetContacts(string user)
         {

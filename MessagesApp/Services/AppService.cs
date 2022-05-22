@@ -119,6 +119,13 @@ namespace MessagesApp.Services
                 chat_1_2.Messages.Add(message_1_2_b);
             }
         }
+        public bool ApiLogin(string username, string pass)
+        {
+            User user = _users.Find(x => x.Username == username);
+            if (user == null) { return false; }
+            return (pass == user.Password);
+        }
+
 
         public List<Json_Contact> ApiGetContacts(string username)
         {
@@ -222,6 +229,19 @@ namespace MessagesApp.Services
             contact.Server = newContact.Server;
             contact.Messages = new List<Message>();
             user.Contacts.Add(contact);
+            return true;
+        }
+
+        public bool ApiAddUser(string username, string pass)
+        {
+            User user = _users.Find(x => x.Username == username);
+            if (user != null) { return false; }
+
+            user = new User();
+            user.Username = username;
+            user.Password = pass;
+            _users.Add(user);
+                        
             return true;
         }
 

@@ -17,6 +17,7 @@ namespace MessagesApp.Models
         public User()
         {
             Contacts = new List<Contact>();
+            Picture = null;
         }
 
     }
