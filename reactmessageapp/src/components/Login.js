@@ -14,18 +14,7 @@ function Login({setUser, setRegister}) {
         e.preventDefault();
         let tempErr = [];
         const userName = usernameTextBox.current.value;
-        const pass = passwordTextBox.current.value;
-        const request = { from: { userName }, content: { pass } };
-
-        
-        axios.post('http://localhost:5180/api/login', request)
-            .then((response) => {
-                setResponse(response.status);
-            });
-
-        console.log(response)
  
-
         if (FindUser(userName)){
             if (VerifyPassword(userName, passwordTextBox.current.value))
                 setUser(userName);

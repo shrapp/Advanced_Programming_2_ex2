@@ -5,10 +5,11 @@ import Me_photo from './prof_img.jpeg'
 import beit_hmikdash from './first_mikdash.jpg'
 import bait_sheni from './second_mikdash.jpg'
 import crown_img from './crown.jpg'
-
 import snowVideo from './snowVideo.mp4'
 import pdfFile from './ex1PdfFile.pdf'
 import record from './record1.ogg'
+
+import contact from './blank_contact.jpg'
 
 
 const users = {};
@@ -107,25 +108,49 @@ users['Shahar'] = {nickName: 'Shahar HaMelech!!!!11', password: 'sh12', photo: S
     }
 
 
-export function FindUser(id){
-    return users[id] != null;
+export async function FindUser(username){
+    let ret = 0
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'accept': '*/*',
+        },
+        body: JSON.stringify({ from: username , content: '0'})
+    };
+    await fetch('http://localhost:5180/api/login', requestOptions)
+        .then(response => ret = response.status);
+
+    return ret == 400;
 }
 
-export function GetUser(myId) {
-    const user = users[myId];
-    if (user != null)
-        return JSON.parse(JSON.stringify(user));
-    else
-        return null;
+export async function VerifyPassword(username, pass) {
+    let ret
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'accept': '*/*',
+        },
+        body: JSON.stringify({ from: username, content: pass })
+    };
+    await fetch('http://localhost:5180/api/login', requestOptions)
+        .then(response => ret = response.status);
+
+    return ret == 200;
 }
 
 export function GetPhoto(id) {
-    if (users[id] != null) {
-        return users[id].photo;
-    } 
+    return contact;
 }
 
-export function GetContacts(myId){
+export function GetContacts(myId) {
+    let ret
+    fetch('http://localhost:5180/api/contacts/?user=' + myId)
+        .then(response => ret = response.json());
+
+    console.log(ret)
+
     if (users[myId] != null) {
         const retval = [];
         for (let con in users[myId].contacts) {
@@ -154,10 +179,6 @@ export function AddContactToUser(user, newContact){
         users[user].contacts[newContact] = [];
 }
 
-export function VerifyPassword(username, password){
-    return users[username].password === password;
-
-}
 
 export function AddUser(userName, password, nickName, profImg) {
     users[userName] = {nickName: nickName, password: password, photo: profImg, contacts: {}}

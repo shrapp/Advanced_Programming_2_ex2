@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using MessagesApp.Services;
 using MessagesApp.Models;
+using System.Web.Http.Cors;
 
 
 namespace MessagesWebApi.Controllers
 {
     [Route("api")]
     [ApiController]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class MainController : ControllerBase
     {
         public class ApiFormat
