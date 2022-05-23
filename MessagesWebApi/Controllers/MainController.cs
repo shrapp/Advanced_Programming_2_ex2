@@ -23,8 +23,12 @@ namespace MessagesWebApi.Controllers
         [HttpPost("login", Name = "Login")]
         public IActionResult Login([FromBody] ApiFormat contact)
         {
-            bool s = service.ApiLogin(contact.from, contact.content);
-            if (s) { return Ok(); };
+            int s = service.ApiLogin(contact.from, contact.content);
+            switch(s)
+            { 
+                case 0: return NotFound();
+                case 1: return Ok();
+            }
             return BadRequest();
         }
 

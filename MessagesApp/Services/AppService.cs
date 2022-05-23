@@ -119,11 +119,12 @@ namespace MessagesApp.Services
                 chat_1_2.Messages.Add(message_1_2_b);
             }
         }
-        public bool ApiLogin(string username, string pass)
+        public int ApiLogin(string username, string pass)
         {
             User user = _users.Find(x => x.Username == username);
-            if (user == null) { return false; }
-            return (pass == user.Password);
+            if (user == null) { return 0; }
+            if (pass == user.Password) return 1;
+            return -1;
         }
 
 

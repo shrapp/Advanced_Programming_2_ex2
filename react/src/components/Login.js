@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
-import {FindUser, VerifyPassword} from "../data/users";
+import { FindUser, VerifyPassword } from "../data/users";
+import axios from "axios";
 
 // this is only a basic screen, to see things can work
 function Login({setUser, setRegister}) {
@@ -7,11 +8,24 @@ function Login({setUser, setRegister}) {
     const usernameTextBox = useRef(null)
     const passwordTextBox = useRef(null)
     const [errors, setErrors] = useState([])
+    const [response, setResponse] = useState("")
 
     const login = function(e){
         e.preventDefault();
         let tempErr = [];
         const userName = usernameTextBox.current.value;
+        const pass = passwordTextBox.current.value;
+        const request = { from: { userName }, content: { pass } };
+
+        
+        axios.post('http://localhost:5180/api/login', request)
+            .then((response) => {
+                setResponse(response.status);
+            });
+
+        console.log(response)
+ 
+
         if (FindUser(userName)){
             if (VerifyPassword(userName, passwordTextBox.current.value))
                 setUser(userName);
