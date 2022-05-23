@@ -12,6 +12,11 @@ namespace MessagesWebApi.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class MainController : ControllerBase
     {
+        public class LoginFormat
+        {
+            public string id { get; set; }
+            public string pass { get; set; }    
+        }
         public class ApiFormat
         {
             public string? from { get; set; }
@@ -23,9 +28,9 @@ namespace MessagesWebApi.Controllers
         AppService service = AppService.CreateAppService();
 
         [HttpPost("login", Name = "Login")]
-        public IActionResult Login([FromBody] ApiFormat contact)
+        public IActionResult Login([FromBody] LoginFormat data)
         {
-            int s = service.ApiLogin(contact.from, contact.content);
+            int s = service.ApiLogin(data.id, data.pass);
             switch(s)
             { 
                 case 0: return NotFound();
@@ -35,9 +40,9 @@ namespace MessagesWebApi.Controllers
         }
 
         [HttpPost("register", Name = "Register")]
-        public IActionResult Register([FromBody] ApiFormat contact)
+        public IActionResult Register([FromBody] LoginFormat data)
         {
-            bool s = service.ApiAddUser(contact.from, contact.content);
+            bool s = service.ApiAddUser(data.id, data.pass);
             if (s) { return StatusCode(200); };
             return BadRequest();
         }

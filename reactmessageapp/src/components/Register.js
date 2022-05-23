@@ -9,37 +9,35 @@ function Register({setUser, setRegister}) {
 
     const usernameTextBox = useRef(null)
     const passwordTextBox = useRef(null)
-    const nickNameTextBox = useRef(null)
+    //const nickNameTextBox = useRef(null)
 
     const [userNameErrors, setuserNameErrors] = useState('');
     const [passwordErrors, setpasswordErrors] = useState('');
-    const [nicknameErrors, setnicknameErrors] = useState('');
+    //const [nicknameErrors, setnicknameErrors] = useState('');
 
     const login = function(){setRegister(false);}
 
-    const register = function(e){
+    const register = async function(e){
         e.preventDefault();
         let isErr = false;
         setuserNameErrors('');
         setpasswordErrors('');
-        setnicknameErrors('');
+        //setnicknameErrors('');
         const userName = usernameTextBox.current.value;
         const password = passwordTextBox.current.value;
-        const nickName = nickNameTextBox.current.value;
-        if (FindUser(userName)) {
+        //const nickName = nickNameTextBox.current.value;
+        if (await FindUser(userName)) {
             setuserNameErrors('there is user with this username already')
             isErr = true;
         } else if (!validateUsername(userName))
             isErr = true;
         if (!validatePassword(password))
             isErr = true;
-        if (!validateNickname(nickName))
-            isErr = true;
+        //if (!validateNickname(nickName))
+            //isErr = true;
         if (!isErr) {
-            if (!profilePicture)
-                AddUser(userName, password, nickName, no_image);
-            else
-                AddUser(userName, password, nickName, profilePicture);
+            const tes = await AddUser(userName, password, no_image);
+            console.log(tes);
             setRegister(false);
             setUser(userName);
         }
@@ -62,6 +60,7 @@ function Register({setUser, setRegister}) {
         return true;
     }
 
+    /*
     const validateNickname = function(text){
         if (text.length < 3){
             setnicknameErrors('Nickname should be at least 3 characters');
@@ -73,6 +72,7 @@ function Register({setUser, setRegister}) {
         }
         return true;
     }
+    */
 
     const validatePassword = function(password) {
         let errList = '';
@@ -115,17 +115,6 @@ function Register({setUser, setRegister}) {
             </div>
             <div className="mb-3 err_alert" style={passwordErrors ? {display: "flex"} : {display: "none"}}>
                 {passwordErrors}
-            </div>
-            <div className="mb-3">
-                <label className="form-label">Display Name</label>
-                <input ref={nickNameTextBox} type="nickName" className="form-control"></input>
-            </div>
-            <div className="mb-3 err_alert" style={nicknameErrors ? {display: "flex"} : {display: "none"}}>
-                {nicknameErrors}
-            </div>
-            <div className="mb-3">
-                <label className="form-label">profile image (optional)</label>
-                <input type="file" accept="image/*" className="form-control" id="uploadProfilePhoto" onChange={handlePicture}></input>
             </div>
             <button type="submit" onClick={register} className="btn btn-primary">Submit</button>
             <div>

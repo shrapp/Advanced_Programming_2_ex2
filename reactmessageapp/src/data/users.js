@@ -116,7 +116,7 @@ export async function FindUser(username){
             'Content-Type': 'application/json',
             'accept': '*/*',
         },
-        body: JSON.stringify({ from: username , content: '0'})
+        body: JSON.stringify({ id: username , pass: '0'})
     };
     await fetch('http://localhost:5180/api/login', requestOptions)
         .then(response => ret = response.status);
@@ -132,7 +132,7 @@ export async function VerifyPassword(username, pass) {
             'Content-Type': 'application/json',
             'accept': '*/*',
         },
-        body: JSON.stringify({ from: username, content: pass })
+        body: JSON.stringify({ id: username, pass: pass })
     };
     await fetch('http://localhost:5180/api/login', requestOptions)
         .then(response => ret = response.status);
@@ -144,13 +144,15 @@ export function GetPhoto(id) {
     return contact;
 }
 
-export function GetContacts(myId) {
-    let ret
-    fetch('http://localhost:5180/api/contacts/?user=' + myId)
-        .then(response => ret = response.json());
+export async function GetContacts(username) {
+    let contacts
+    await fetch('http://localhost:5180/api/contacts/?user=' + username)
+        .then((response) => { return response.json(); })
+        .then((data) => contacts = data);
 
-    console.log(ret)
+    return contacts;
 
+    /*
     if (users[myId] != null) {
         const retval = [];
         for (let con in users[myId].contacts) {
@@ -160,6 +162,7 @@ export function GetContacts(myId) {
     } else {
         return null;
     }
+    */
 }
 
 export function GetNickName(id){
@@ -180,8 +183,20 @@ export function AddContactToUser(user, newContact){
 }
 
 
-export function AddUser(userName, password, nickName, profImg) {
-    users[userName] = {nickName: nickName, password: password, photo: profImg, contacts: {}}
+export async function AddUser(userName, password, nickName, profImg) {
+    let ret
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'accept': '*/*',
+        },
+        body: JSON.stringify({ id: userName, pass: password })
+    };
+    await fetch('http://localhost:5180/api/register', requestOptions)
+        .then(response => ret = response.status);
+
+    return ret == 200;
 }
 
 export function SendMessage(fromUser, toContact, time, type, content, fileName) {
