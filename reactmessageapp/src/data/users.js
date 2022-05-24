@@ -105,7 +105,8 @@ users['Shahar'] = {nickName: 'Shahar HaMelech!!!!11', password: 'sh12', photo: S
             {sender: true, time: '8:50 10.4.22', type: 'Audio', content: record}
             ]
         }
-    }
+}
+users['1'] = { nickMame: '1', password: '1', photo: contact, contacts: {}}
 
 
 export async function FindUser(username){
@@ -119,7 +120,7 @@ export async function FindUser(username){
         body: JSON.stringify({ id: username , pass: '0'})
     };
     await fetch('http://localhost:5180/api/login', requestOptions)
-        .then(response => ret = response.status);
+        .catch(err => setTimeout(() => console.clear())).then(response => ret = response.status);
 
     return ret == 400;
 }
@@ -135,7 +136,7 @@ export async function VerifyPassword(username, pass) {
         body: JSON.stringify({ id: username, pass: pass })
     };
     await fetch('http://localhost:5180/api/login', requestOptions)
-        .then(response => ret = response.status);
+        .then(response => ret = response.status).catch(err => setTimeout(() => console.clear()));
 
     return ret == 200;
 }
@@ -144,17 +145,15 @@ export function GetPhoto(id) {
     return contact;
 }
 
-export function GetContacts(username) {
-    /*
+export async function GetContacts(username) {
     let contacts
     await fetch('http://localhost:5180/api/contacts/?user=' + username)
         .then((response) => { return response.json(); })
         .then((data) => contacts = data);
 
     return contacts;
-     */
-    //console.log(username);
-    
+
+    /*
     if (users[username] != null) {
         const retval = [];
         for (let con in users[username].contacts) {
@@ -165,6 +164,7 @@ export function GetContacts(username) {
     } else {
         return null;
     }
+    */
    
 }
 
@@ -180,9 +180,19 @@ export function GetChat(myId, othersId){
     }
 }
 
-export function AddContactToUser(user, newContact){
-    if (users[user].contacts[newContact] == null)
-        users[user].contacts[newContact] = [];
+export async function AddContactToUser(user, newContact, nickname, contactServer){
+    let ret;
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'accept': '*/*',
+        },
+        body: JSON.stringify({ id: newContact, name: nickname, server: contactServer })
+    };
+    await fetch('http://localhost:5180/api/contacts?user='+user, requestOptions)
+        .then(response => ret = response.status);
+    //console.log("ret: "+ret)
 }
 
 

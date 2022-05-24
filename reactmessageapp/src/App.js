@@ -14,7 +14,7 @@ function App() {
         if (!register) {
             return ( 
                 <div className="app">
-                     < Login setUser = { setUser } setRegister={setRegister} />
+                     <Login setUser = { setUser } setRegister={setRegister} />
                 </div>
             )
             }
