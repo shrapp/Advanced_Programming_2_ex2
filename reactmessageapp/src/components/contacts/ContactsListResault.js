@@ -1,9 +1,10 @@
 import { GetChat, GetNickName, GetPhoto } from '../../data/users';
 import ContactItem from './ContactItem'
 import React from "react";
+import { wait } from '@testing-library/user-event/dist/utils';
 
-function ContactsListResault({user, toShow, setDisplayedContact}){
-    const contactsListDisp = toShow.map((contact, key) =>{
+function ContactsListResault({ user, toShow, setDisplayedContact }) {
+    const contactsListDisp = toShow.map((contact, key) => {
         const nickName = GetNickName(contact);
         const photo = GetPhoto(contact);
         let chat =  GetChat(user, contact);

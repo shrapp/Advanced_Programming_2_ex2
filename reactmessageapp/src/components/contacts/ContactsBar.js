@@ -9,8 +9,9 @@ import alt from '../../data/blank_contact.jpg'
 
 function ContactsBar({user, setDisplayedContact}) {
 
-    //var contacts = GetContacts(user);
+
     const [contacts, SetContacts] = useState(GetContacts(user));
+
     const [contactsToShow, setContactsToShow] = useState(GetContacts(user));
 
     const doSearch = function(q){
@@ -22,7 +23,7 @@ function ContactsBar({user, setDisplayedContact}) {
             <div className="user_bar">
                 <img src={GetPhoto(user)} alt={alt} className="proph_imgs"></img>
                 <div className="chat__contact-wrapper">
-					<h1 className="chat__contact-name"> {GetNickName(user)} </h1>
+					<h1 className="chat__contact-name"> {user} </h1>
 				</div>
                 <AddContact user={user} contacts={contacts} setContacts={SetContacts} setContactsToShow={setContactsToShow} />
             </div>

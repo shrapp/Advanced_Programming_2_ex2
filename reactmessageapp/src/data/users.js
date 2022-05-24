@@ -144,25 +144,28 @@ export function GetPhoto(id) {
     return contact;
 }
 
-export async function GetContacts(username) {
+export function GetContacts(username) {
+    /*
     let contacts
     await fetch('http://localhost:5180/api/contacts/?user=' + username)
         .then((response) => { return response.json(); })
         .then((data) => contacts = data);
 
     return contacts;
-
-    /*
-    if (users[myId] != null) {
+     */
+    //console.log(username);
+    
+    if (users[username] != null) {
         const retval = [];
-        for (let con in users[myId].contacts) {
+        for (let con in users[username].contacts) {
             retval.push(con);
         }
+        //console.log(retval);
         return retval;
     } else {
         return null;
     }
-    */
+   
 }
 
 export function GetNickName(id){
