@@ -9,6 +9,8 @@ builder.Services.AddDbContext<MessagesAppContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

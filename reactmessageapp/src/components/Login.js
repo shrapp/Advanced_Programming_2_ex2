@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { FindUser, VerifyPassword } from "../data/users";
-import axios from "axios";
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 // this is only a basic screen, to see things can work
 function Login({setUser, setRegister}) {
@@ -8,7 +8,40 @@ function Login({setUser, setRegister}) {
     const usernameTextBox = useRef(null)
     const passwordTextBox = useRef(null)
     const [errors, setErrors] = useState([])
-    const [response, setResponse] = useState("")
+    const [connection, setConnection] = useState()
+
+    const joinHub = async (user) => {
+        try {
+            const connection = new HubConnectionBuilder()
+                .withUrl("http://localhost:5180/login")
+                .configureLogging(LogLevel.Information)
+                .build();
+            /*
+            connection.on("ReceiveMessage", (user, message) => {
+                setMessages(messages => [...messages, { user, message }]);
+            });
+
+            connection.on("UsersInRoom", (users) => {
+                setUsers(users);
+            });
+
+            connection.onclose(e => {
+                setConnection();
+                setMessages([]);
+                setUsers([]);
+            });
+            */
+
+            await connection.start();
+            
+            setConnection(connection);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+
+
 
     const login = async function(e){
         e.preventDefault();
@@ -18,8 +51,10 @@ function Login({setUser, setRegister}) {
 
  
         if (await FindUser(userName)){
-            if (await VerifyPassword(userName, passwordTextBox.current.value))
+            if (await VerifyPassword(userName, passwordTextBox.current.value)) {
                 setUser(userName);
+                joinHub(userName);
+            }
             else
                 tempErr.push('wrong password')
         } else {
