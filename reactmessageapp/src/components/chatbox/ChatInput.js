@@ -57,9 +57,7 @@ function ChatInput({submitNewMessage}) {
 			if (messageType === 'text') {
 				submitNewMessage(messageType, newMessage);
 				setNewMessage('');
-			} else {
-				submitNewMessage(messageType, fileUploaded);
-			}
+			} 
 		}
 	};
     
@@ -123,9 +121,7 @@ function ChatInput({submitNewMessage}) {
 			<div className="chat__input-wrapper">
 			<div className="pos-rel">
 				<button className="btn btn-default" aria-label="Attach" 
-					onClick={() => {
-						setShowAttach(!showAttach);
-						determineMessageType('attachBtn')}}>
+					>
 					<Icon
 						id="attach"
 						className={`chat__input-icon ${
@@ -181,7 +177,7 @@ function ChatInput({submitNewMessage}) {
 					<Icon id="send" className="chat__input-icon" />
 				</button>
 			) : (<button aria-label="Record voice note" 
-			onClick={startRecording} 
+		
 			className="btn btn-default">
 				<Icon id="microphone" className="chat__input-icon" />
 			</button>

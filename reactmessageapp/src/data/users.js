@@ -215,18 +215,29 @@ export async function AddUser(userName, password, nickName, profImg) {
     return ret == 200;
 }
 
-export function SendMessage(fromUser, toContact, time, type, content, fileName) {
+export async function SendMessage(fromUser, toContact, time, type, content, fileName) {
     const sentMsg = {sender: false, time: time, type: type, content: content, fileName: fileName}
-    const recvMsg = {sender: true, time: time, type: type, content: content, fileName: fileName}
+    const recvMsg = { sender: true, time: time, type: type, content: content, fileName: fileName }
 
-    if (users[fromUser] === undefined && users[toContact === undefined]) {
-        return null;
-    } else {
-        if (!(toContact in users[fromUser].contacts))
-            {users[fromUser].contacts[toContact] = [];}
-        users[fromUser].contacts[toContact].push(sentMsg);
-        if (!(fromUser in users[toContact].contacts))
-            {users[toContact].contacts[fromUser] = [];}
-        users[toContact].contacts[fromUser].push(recvMsg);
-    }
+    const request1Options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'accept': '*/*',
+        },
+        body: JSON.stringify({ from: fromUser, to: toContact.id , content: content})
+    };
+    await fetch('http://' + toContact.server + '/api/transfer', request1Options)
+        
+
+    const request2Options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'accept': '*/*',
+        },
+        body: JSON.stringify({ content: content })
+    };
+    await fetch('http://localhost:5180/api/contacts/' + toContact.id + '/messages/?user=' + fromUser, request2Options)
+      
 }
