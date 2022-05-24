@@ -10,13 +10,13 @@ function Login({setUser, setRegister}) {
     const [errors, setErrors] = useState([])
     const [response, setResponse] = useState("")
 
-    const login = function(e){
+    const login = async function(e){
         e.preventDefault();
         let tempErr = [];
         const userName = usernameTextBox.current.value;
  
-        if (FindUser(userName)){
-            if (VerifyPassword(userName, passwordTextBox.current.value))
+        if (await FindUser(userName)){
+            if (await VerifyPassword(userName, passwordTextBox.current.value))
                 setUser(userName);
             else
                 tempErr.push('wrong password')

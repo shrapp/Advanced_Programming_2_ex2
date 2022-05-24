@@ -7,19 +7,26 @@ function AddContact({user, contacts, setContacts, setContactsToShow}) {
     
     const [errors, setErrors] = useState('');
 
-    const addContactLogic = function () {
+    const addContactLogic = async function () {
         setErrors('');
-        const newContact = addBox.current.value;   
-        if (contacts.includes(newContact))
+        const newContact = addBox.current.value;
+        const newNickname = newNickName.current.value;
+        const ncServer = server.current.value;
+        if (newContact == '' || newNickName == '' || ncServer == '')
+            setErrors('Please fill all three fields')
+        else if (contacts.includes(newContact))
             setErrors('you added this contact already')
         else if (user === newContact)
             setErrors('you can\'t add yourself as a contact')
-        else if (FindUser(newContact)) {
+        else if (await sendInvitation(newContact, ncServer)) {
             addBox.current.value = '';
-            AddContactToUser(user, newContact);
-        //    contacts.push(newContact);
-            setContacts(GetContacts(user));
-            setContactsToShow(GetContacts(user))
+            newNickName.current.value = '';
+            server.current.value = '';
+            if (await AddContactToUser(user, newContact, newNickname, ncServer)) {
+                ////    contacts.push(newContact);
+                setContacts(GetContacts(user));
+                setContactsToShow(GetContacts(user))
+            }
         } else {
             if (newContact !== ''){
                 setErrors('no such user')
@@ -27,7 +34,24 @@ function AddContact({user, contacts, setContacts, setContactsToShow}) {
         }
     }
 
+    const sendInvitation = async function (name, ncServer) {
+        var ret = 0;
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'accept': '*/*',
+            },
+            body: JSON.stringify({ from: user, to: name, server: 'localhost:5180'})
+        }
+        await fetch('http://' + ncServer + '/api/invitations', requestOptions)
+            .then(response => ret = response.status);
+        return (ret == 201);
+    }
+
     const addBox = useRef('');
+    const newNickName = useRef('');
+    const server = useRef('');
 
 
     return(
@@ -43,7 +67,13 @@ function AddContact({user, contacts, setContacts, setContactsToShow}) {
                         </div>
                         <div className="modal-body">
                             <form className="d-flex" >
-                                <input ref={addBox} onClick={addContactLogic} onKeyDown={(e)=>{if (e.key === "Enter") {e.preventDefault(); addContactLogic(e)}}} className="form-control me-2" type="Type-message" placeholder="Write contact's username here" aria-label="Type-message"></input>
+                                <input ref={addBox} onKeyDown={(e)=>{if (e.key === "Enter") {e.preventDefault(); addContactLogic(e)}}} className="form-control me-2" type="Type-message" placeholder="Write contact's username here" aria-label="Type-message"></input>
+                            </form>
+                            <form className="d-flex" >
+                                <input ref={newNickName} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addContactLogic(e) } }} className="form-control me-2" type="Type-message" placeholder="nickName for your contact" aria-label="Type-message"></input>
+                            </form>
+                            <form className="d-flex" >
+                                <input ref={server} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addContactLogic(e) } }} className="form-control me-2" type="Type-message" placeholder="server where contact is registereg" aria-label="Type-message"></input>
                             </form>
                             <div className="err_alert" style={errors ? { display: "flex" } : { display: "none" }}>
                                 {errors}
