@@ -75,7 +75,7 @@ namespace MessagesApp.Services
                 chat_0_1.User = u1.Username;
                 chat_0_1.Nickname = "alicia";
                 chat_0_1.Messages = new List<Message>();
-                chat_0_1.Server = "localhost:7266"; // not good, but for now
+                chat_0_1.Server = "localhost:5180"; // not good, but for now
                 tester.Contacts.Add(chat_0_1);
 
                 Message message0 = new Message();
@@ -97,7 +97,7 @@ namespace MessagesApp.Services
                 chat_1_2.User = u2.Username;
                 chat_1_2.Nickname = "bobby";
                 chat_1_2.Messages = new List<Message>();
-                chat_1_2.Server = "localhost:7265"; // not good, but for now
+                chat_1_2.Server = "localhost:5180"; // not good, but for now
                 tester.Contacts.Add(chat_1_2);
 
                 Message message_1_2 = new Message();

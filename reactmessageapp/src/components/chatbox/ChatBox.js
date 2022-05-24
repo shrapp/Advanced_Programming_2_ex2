@@ -27,7 +27,7 @@ function ChatBox({contact, user, did_data_change, set_did_data_change}) {
                 <div className="chat_header">
                     <img src={GetPhoto(contact)} alt={alt} className="cont_imgs"></img>
                     <div className="chat_header_text">
-                        <h2>{GetNickName(contact)}</h2>
+                        <h2>{contact.name}</h2>
                     </div>
                 </div>
                 <div className="chat_body chat__content">

@@ -174,10 +174,13 @@ export function GetNickName(id){
     }
 }
 
-export function GetChat(myId, othersId){
-    if (users[myId] != null && users[myId].contacts[othersId] != null) {
-        return users[myId].contacts[othersId];
-    }
+export async function GetChat(myId, contact){
+    let chat
+    await fetch('http://' + contact.server + '/api/contacts/' + contact.id + '/messages?user=' + myId)
+        .then((response) => { return response.json(); })
+        .then((data) => chat = data);
+
+    return chat;
 }
 
 export async function AddContactToUser(user, newContact, nickname, contactServer){
