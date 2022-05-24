@@ -3,8 +3,9 @@ import { GetChat } from "../../data/users";
 import formatTime from "./formatTime";
 import { formatDateTime } from "../formatDateTime";
 
-function ChatDisp ({user, contact}) {
+function ChatDisp({ user, contact }) {
 
+    const [ren, Setren] = useState(contact);
     const [chat, SetChat] = useState(null);
 
 
@@ -12,6 +13,11 @@ function ChatDisp ({user, contact}) {
         const valueA = await GetChat(user, contact);
         SetChat(valueA);
     }
+
+    useEffect(() => {
+        get();
+    }, []);
+
     get();
 
     if (chat != null) {

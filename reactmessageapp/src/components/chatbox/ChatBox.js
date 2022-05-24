@@ -9,8 +9,8 @@ import alt from '../../data/blank_contact.jpg'
 function ChatBox({contact, user, did_data_change, set_did_data_change}) {
 
     const submitNewMessage = (message_type, input, fileName) => {
-        const currentTime = formatDateTime(new Date().toISOString());
-        SendMessage(user, contact, currentTime, message_type, input, fileName);
+
+        SendMessage(user, contact, message_type, input, fileName);
         set_did_data_change(!did_data_change);
     }
         

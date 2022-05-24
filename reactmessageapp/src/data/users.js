@@ -215,9 +215,7 @@ export async function AddUser(userName, password, nickName, profImg) {
     return ret == 200;
 }
 
-export async function SendMessage(fromUser, toContact, time, type, content, fileName) {
-    const sentMsg = {sender: false, time: time, type: type, content: content, fileName: fileName}
-    const recvMsg = { sender: true, time: time, type: type, content: content, fileName: fileName }
+export async function SendMessage(fromUser, toContact, type, content) {
 
     const request1Options = {
         method: 'POST',

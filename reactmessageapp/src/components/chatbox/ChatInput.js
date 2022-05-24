@@ -62,13 +62,8 @@ function ChatInput({submitNewMessage}) {
 	};
     
 	const pressSubmit = () => {
-		if (messageType === 'text') {
-			submitNewMessage(messageType, newMessage);
-			setNewMessage('');
-		} else if (fileUploaded != null) {
-			submitNewMessage(messageType, fileUploaded, media.name);
-			setFileUploaded(null);
-		}
+		submitNewMessage(messageType, newMessage);
+		setNewMessage('');
 	}
 
 	const determineMessageType = (key) => {
@@ -177,7 +172,7 @@ function ChatInput({submitNewMessage}) {
 					<Icon id="send" className="chat__input-icon" />
 				</button>
 			) : (<button aria-label="Record voice note" 
-		
+			
 			className="btn btn-default">
 				<Icon id="microphone" className="chat__input-icon" />
 			</button>
