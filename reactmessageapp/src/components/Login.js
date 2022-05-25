@@ -17,12 +17,12 @@ function Login({setUser, setRegister}) {
                 .configureLogging(LogLevel.Information)
                 .build();
             
-            connection.on("ReceiveMessage", (user, message) => {
-                setMessages(messages => [...messages, { user, message }]);
+            connection.on("ReceiveMessage", () => {
+                console.log("signalR")
             });
 
-            connection.on("ReceiveContact", (users) => {
-                setUsers(users);
+            connection.on("ReceiveContact", (user) => {
+                console.log("signalR"+ user)
             });
 
             await connection.start();

@@ -14,13 +14,8 @@ namespace MessagesWebApi.Controllers
     public class MainController : ControllerBase
     {
         private static IHubContext<ChatHub> hub;
-        private static AppService service; 
+        private static AppService service = AppService.CreateAppService();
 
-        public MainController(AppService _service, IHubContext<ChatHub> _hub)
-        {
-            hub = _hub;
-            service = _service;
-        }
 
         public class LoginFormat
         {
@@ -120,7 +115,7 @@ namespace MessagesWebApi.Controllers
             contact.Name = data.from;
             bool s = service.ApiAddContact(data.to, contact);
             if (s) {
-                hub.Clients.User(data.to).ReceiveContact(data.to);
+                hub.Clients.User(data.to).ReceiveContact(data.from, data.to);
                 return StatusCode(201); 
             };
             return BadRequest();

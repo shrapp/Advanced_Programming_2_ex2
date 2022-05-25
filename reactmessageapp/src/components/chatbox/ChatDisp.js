@@ -24,7 +24,7 @@ function ChatDisp({chat }) {
             if (true) {
                 return (
                     <div className="chat__msg-group" key={key}>
-                        <p className={`chat__msg ${message.sent ? "chat__msg--rxd" : "chat__msg--sent"}`}>
+                        <p className={`chat__msg ${!(message.sent) ? "chat__msg--rxd" : "chat__msg--sent"}`}>
                             <span className="mes">{content}</span>
                             <span className="chat__msg-filler"> </span>
                             <span className="chat__msg-footer">

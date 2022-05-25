@@ -7,13 +7,8 @@ namespace MessagesWebApi.Hubs
     public class ChatHub : Hub
     {
         private readonly string _botUser;
-        private readonly IDictionary<string, string> _connections;
+        private static readonly IDictionary<string, string> _connections;
 
-        public ChatHub(IDictionary<string, string> connections)
-        {
-            _botUser = "MyChat Bot";
-            _connections = connections;
-        }
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
@@ -36,9 +31,9 @@ namespace MessagesWebApi.Hubs
             await Clients.User(user).SendAsync("ReceiveMessage");
         }
 
-        public async Task ReceiveContact(string user)
+        public async Task ReceiveContact(string from, string to)
         {
-            await Clients.User(user).SendAsync("ReceiveContact");
+            await Clients.User(from).SendAsync("ReceiveContact", to);
         }
 
 
