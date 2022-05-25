@@ -16,21 +16,14 @@ function Login({setUser, setRegister}) {
                 .withUrl("http://localhost:5180/login")
                 .configureLogging(LogLevel.Information)
                 .build();
-            /*
+            
             connection.on("ReceiveMessage", (user, message) => {
                 setMessages(messages => [...messages, { user, message }]);
             });
 
-            connection.on("UsersInRoom", (users) => {
+            connection.on("ReceiveContact", (users) => {
                 setUsers(users);
             });
-
-            connection.onclose(e => {
-                setConnection();
-                setMessages([]);
-                setUsers([]);
-            });
-            */
 
             await connection.start();
             
@@ -62,9 +55,6 @@ function Login({setUser, setRegister}) {
         }
         setErrors(tempErr);
 
-        //console.log
-
-        //setUser('example');
     }
 
     const registerButton = function(){setRegister(true);}

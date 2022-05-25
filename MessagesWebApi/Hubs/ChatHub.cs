@@ -27,20 +27,15 @@ namespace MessagesWebApi.Hubs
 
         public async Task Login(string userConnection)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, userConnection);
-
             _connections[Context.ConnectionId] = userConnection;
 
-            await Clients.All.SendAsync("ReceiveMessage", _botUser, $"{userConnection} has joined");
-
-           
         }
 
-        public async Task SendMessage(string message)
+        public async Task ReceiveMessage(string user)
         {
             if (_connections.TryGetValue(Context.ConnectionId, out string userConnection))
             {
-                await Clients.All.SendAsync("ReceiveMessage", userConnection, message);
+                await Clients.User(user).SendAsync("ReceiveMessage", userConnection, message);
             }
         }
 
