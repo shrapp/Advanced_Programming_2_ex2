@@ -25,20 +25,24 @@ namespace MessagesWebApi.Hubs
             return base.OnDisconnectedAsync(exception);
         }
 
-        public async Task Login(string userConnection)
+        public async Task Login(string user)
         {
-            _connections[Context.ConnectionId] = userConnection;
+            _connections[Context.ConnectionId] = user;
 
         }
 
         public async Task ReceiveMessage(string user)
         {
-            if (_connections.TryGetValue(Context.ConnectionId, out string userConnection))
-            {
-                await Clients.User(user).SendAsync("ReceiveMessage", userConnection, message);
-            }
+            await Clients.User(user).SendAsync("ReceiveMessage");
         }
 
-    
+        public async Task ReceiveContact(string user)
+        {
+            await Clients.User(user).SendAsync("ReceiveContact");
+        }
+
+
+
+
     }
 }
