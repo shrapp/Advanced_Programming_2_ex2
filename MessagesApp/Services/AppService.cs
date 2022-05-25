@@ -223,8 +223,10 @@ namespace MessagesApp.Services
             if (newContact == null) {return false;}
             User user = _users.Find(x => x.Username == username);
             if (user == null) {return false;}
-            
-            Contact contact = new Contact();
+            Contact contact = user.Contacts.Find(x => x.User == newContact.Id);
+            if (contact != null) { return false; }
+
+            contact = new Contact();
             contact.User = newContact.Id;
             contact.Nickname = newContact.Name;
             contact.Server = newContact.Server;

@@ -1,11 +1,17 @@
 // noinspection JSPrimitiveTypeWrapperUsage
 
 import React, { useRef, useState } from "react";
-import { AddContactToUser, FindUser, GetContacts } from "../../data/users"
+import { AddContactToUser, GetContacts } from "../../data/users"
 
-function AddContact({user, contacts, setContacts, setContactsToShow}) {
-    
+function AddContact({ user, contacts, setContacts, setContactsToShow }) {
+
     const [errors, setErrors] = useState('');
+
+    const findContactsNames = contacts.map((contact, key) => {
+        return contact.id;
+    })
+
+    var contactsNames = findContactsNames;
 
     const addContactLogic = async function () {
         setErrors('');
@@ -14,7 +20,7 @@ function AddContact({user, contacts, setContacts, setContactsToShow}) {
         const ncServer = server.current.value;
         if (newContact == '' || newNickName == '' || ncServer == '')
             setErrors('Please fill all three fields')
-        else if (contacts.includes(newContact))
+        else if (contactsNames.includes(newContact))
             setErrors('you added this contact already')
         else if (user === newContact)
             setErrors('you can\'t add yourself as a contact')
@@ -23,13 +29,12 @@ function AddContact({user, contacts, setContacts, setContactsToShow}) {
             newNickName.current.value = '';
             server.current.value = '';
             if (await AddContactToUser(user, newContact, newNickname, ncServer)) {
-                ////    contacts.push(newContact);
-                setContacts(GetContacts(user));
-                setContactsToShow(GetContacts(user))
+                setContacts(await GetContacts(user));
+                setContactsToShow(await GetContacts(user))
             }
         } else {
-            if (newContact !== ''){
-                setErrors('no such user')
+            if (newContact !== '') {
+                setErrors('no such user in server ' + ncServer)
             }
         }
     }
@@ -42,10 +47,14 @@ function AddContact({user, contacts, setContacts, setContactsToShow}) {
                 'Content-Type': 'application/json',
                 'accept': '*/*',
             },
-            body: JSON.stringify({ from: user, to: name, server: 'localhost:5180'})
+            body: JSON.stringify({ from: user, to: name, server: 'localhost:5180' })
         }
-        await fetch('http://' + ncServer + '/api/invitations', requestOptions)
-            .then(response => ret = response.status);
+        try {
+            await fetch('http://' + ncServer + '/api/invitations', requestOptions)
+                .then(response => ret = response.status);
+        } catch (error) {
+            //setErrors('problem with server, are you sure the server is correct?')
+        }
         return (ret == 201);
     }
 
@@ -54,7 +63,7 @@ function AddContact({user, contacts, setContacts, setContactsToShow}) {
     const server = useRef('');
 
 
-    return(
+    return (
         <div>
             <button type="submit" className="bi bi-person-plus rounded-pill" id="add_contact" data-bs-toggle="modal" data-bs-target="#exampleModal">
             </button>
@@ -67,7 +76,7 @@ function AddContact({user, contacts, setContacts, setContactsToShow}) {
                         </div>
                         <div className="modal-body">
                             <form className="d-flex" >
-                                <input ref={addBox} onKeyDown={(e)=>{if (e.key === "Enter") {e.preventDefault(); addContactLogic(e)}}} className="form-control me-2" type="Type-message" placeholder="Write contact's username here" aria-label="Type-message"></input>
+                                <input ref={addBox} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addContactLogic(e) } }} className="form-control me-2" type="Type-message" placeholder="Write contact's username here" aria-label="Type-message"></input>
                             </form>
                             <form className="d-flex" >
                                 <input ref={newNickName} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addContactLogic(e) } }} className="form-control me-2" type="Type-message" placeholder="nickName for your contact" aria-label="Type-message"></input>

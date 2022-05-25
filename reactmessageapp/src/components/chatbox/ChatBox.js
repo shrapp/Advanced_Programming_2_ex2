@@ -1,16 +1,17 @@
 import React from "react";
 import "./ChatBox.css";
-import { GetNickName, GetPhoto, SendMessage } from '../../data/users';
+import { GetPhoto, SendMessage } from '../../data/users';
 import ChatDisp from "./ChatDisp";
 import { formatDateTime } from "../formatDateTime";
 import ChatInput from "./ChatInput";
 import alt from '../../data/blank_contact.jpg'
 
-function ChatBox({contact, user, did_data_change, set_did_data_change}) {
+function ChatBox({ contact, user, chat, did_data_change, set_did_data_change }) {
 
-    const submitNewMessage = (message_type, input, fileName) => {
 
-        SendMessage(user, contact, message_type, input, fileName);
+    const submitNewMessage = async (message_type, input, fileName) => {
+
+        await SendMessage(user, contact, message_type, input, fileName);
         set_did_data_change(!did_data_change);
     }
         
@@ -20,7 +21,6 @@ function ChatBox({contact, user, did_data_change, set_did_data_change}) {
                 <div className="fill"></div>
             </div>
         )
-
     } else {
         return (
             <div className="chatbox col-8 limit_column_height">
@@ -31,7 +31,7 @@ function ChatBox({contact, user, did_data_change, set_did_data_change}) {
                     </div>
                 </div>
                 <div className="chat_body chat__content">
-                    <ChatDisp user={user} contact={contact} />
+                    <ChatDisp chat={chat} />
                 </div>
                     <ChatInput submitNewMessage={submitNewMessage} />
             </div>

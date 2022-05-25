@@ -179,7 +179,6 @@ export async function GetChat(myId, contact){
     await fetch('http://' + contact.server + '/api/contacts/' + contact.id + '/messages?user=' + myId)
         .then((response) => { return response.json(); })
         .then((data) => chat = data);
-
     return chat;
 }
 
@@ -195,7 +194,7 @@ export async function AddContactToUser(user, newContact, nickname, contactServer
     };
     await fetch('http://localhost:5180/api/contacts?user='+user, requestOptions)
         .then(response => ret = response.status);
-    //console.log("ret: "+ret)
+    return ret == 201
 }
 
 

@@ -2,7 +2,15 @@ import ContactItem from './ContactItem'
 import React from "react";
 import '../chatbox/formatTime'
 
-function ContactsListResault({ toShow, setDisplayedContact }) {
+function ContactsListResault({ toShow, allContacts, setDisplayedContact, setToShow, isInSearch }) {
+    if (toShow == null) {
+        setToShow(allContacts);
+        return (<div></div>)
+    }
+    if (!isInSearch) {
+        if (toShow != allContacts)
+            setToShow(allContacts);
+    }
     const contactsListDisp = toShow.map((contact, key) => {
         return <ContactItem
             Contact={contact}

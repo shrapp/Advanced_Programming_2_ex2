@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { GetChat } from "../../data/users";
 import formatTime from "./formatTime";
 import { formatDateTime } from "../formatDateTime";
 
-function ChatDisp({ user, contact }) {
+function ChatDisp({chat }) {
 
-    const [ren, Setren] = useState(contact);
-    const [chat, SetChat] = useState(null);
+    //const [ren, Setren] = useState(false);
+    //const [chat, SetChat] = useState(null);
 
 
-    async function get() {
-        const valueA = await GetChat(user, contact);
-        SetChat(valueA);
-    }
+    //async function get() {
+    //    const valueA = await GetChat(user, contact);
+    //    //return valueA;
+    //    SetChat(valueA);
+    //}
 
-    useEffect(() => {
-        get();
-    }, []);
-
-    get();
+    //useEffect(() => {
+    //    get();
+    //}, [ren]);
 
     if (chat != null) {
         const chat_disp = chat.map((message, key) => {

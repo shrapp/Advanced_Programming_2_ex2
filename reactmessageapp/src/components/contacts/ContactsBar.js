@@ -7,29 +7,23 @@ import "./contacts.css"
 import alt from '../../data/blank_contact.jpg'
 
 
-function ContactsBar({ user, setDisplayedContact }) {
+function ContactsBar({ user, contacts, setDisplayedContact, setDataChanged }) {
 
-
-
-    const  [contacts, SetContacts] = useState(null);
+    //const [contacts, SetContacts] = useState(recContacts);
 
     const [contactsToShow, setContactsToShow] = useState(null);
 
-    async function getContacts() {
-        const valueA = await GetContacts(user);
-        SetContacts(valueA);
-        setContactsToShow(valueA);
+    const [inSearch, setInSearch] = useState(false);
+
+    const SetContacts = (contList) => {
+        setDataChanged(true);
     }
 
-    useEffect(() => {
-        getContacts();
-    }, []);
 
-
-    const doSearch = function(q){
-        setContactsToShow(contacts.filter((contact) => GetNickName(contact).includes(q)));
+    const doSearch = function (q) {
+        setInSearch(q != '');
+        setContactsToShow(contacts.filter((contact) => contact.name.includes(q)));
     }
-
 
     if (contacts != null) {
         return (
@@ -42,9 +36,14 @@ function ContactsBar({ user, setDisplayedContact }) {
                     <AddContact user={user} contacts={contacts} setContacts={SetContacts} setContactsToShow={setContactsToShow} />
                 </div>
                 <SearchContacts doSearch={doSearch} />
-                <ContactsListResault toShow={contactsToShow} user={user} setDisplayedContact={setDisplayedContact} />
+                <ContactsListResault toShow={contactsToShow} user={user} allContacts={contacts}
+                    setDisplayedContact={setDisplayedContact} setToShow={setContactsToShow}
+                    isInSearch={inSearch}/>
             </aside>
         )
+    } else {
+        setDataChanged(true);
+        return(<div></div>)
     }
 }
 
