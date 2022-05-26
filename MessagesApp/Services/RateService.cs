@@ -33,7 +33,7 @@ namespace MessagesApp.Services
                 r.NumRate = 4;
                 r.Feedback = "very good!";
                 r.Time = DateTime.Now;
-                r.RaterName = "Chemi.Chemi";
+                r.RaterName = "Chemi";
                 r.Id = 2;
                 _rates.Add(r);
             }
@@ -48,21 +48,6 @@ namespace MessagesApp.Services
         public Rate Get(int id)
         {
             return _rates.Find(x => x.Id == id);
-            ////return _context.Rate == null ? 404 : _context.Rate.FirstOrDefaultAsync(m => m.Id == id);
-            //if (id == null || _context.Rate == null)
-            //{
-            //    return null;
-            //}
-
-            //// not good, I should wait!!!!!!!!!!
-            //var rate = _context.Rate
-            //    .FirstOrDefault(m => m.Id == id);
-            //if (rate == null)
-            //{
-            //    return null;
-            //}
-
-            //return rate;
         }
 
         public void Create(int numRate, string feedback, string raterName)

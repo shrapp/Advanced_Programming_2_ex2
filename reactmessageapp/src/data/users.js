@@ -1,4 +1,4 @@
-import contact from './blank_contact.jpg'
+import blank_contact from './blank_contact.jpg'
 
 export async function FindUser(username){
     let ret = 0
@@ -33,7 +33,7 @@ export async function VerifyPassword(username, pass) {
 }
 
 export function GetPhoto(id) {
-    return contact;
+    return blank_contact;
 }
 
 export async function GetContacts(username) {

@@ -36,15 +36,15 @@
         <div class="rate_in_list_content">
             <div class="RIL_spaces">
                 <span class="fs-5 RIL_rater_name col-sm-9">@Html.DisplayFor(modelItem => item.RaterName)</span>
-                <span class="RIL_hour_and_time col-sm-3">@Html.DisplayFor(modelItem => item.Time)</span>
             </div>
             <span class="RIL_spaces feedback_preview">@Html.DisplayFor(modelItem => item.Feedback)</span>
+            <span class="RIL_hour_and_time col-sm-3">@Html.DisplayFor(modelItem => item.Time)</span>
+        </div>
             <div>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </div>
-        </div>
     </li>
 }
 </ul>
