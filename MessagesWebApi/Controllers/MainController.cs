@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MessagesApp.Services;
-using MessagesApp.Models;
 using System.Web.Http.Cors;
 using Microsoft.AspNetCore.SignalR;
 using MessagesWebApi.Hubs;
@@ -120,7 +118,6 @@ namespace MessagesWebApi.Controllers
             bool s = service.ApiAddContact(data.to, contact);
             if (s) {
                 hub.Clients.Group(data.to).SendAsync("ReceiveMessage");
-                //               hub.Clients.User(data.to).SendAsync("ReceiveContact");
                 return StatusCode(201); 
             };
             return BadRequest();
@@ -133,7 +130,6 @@ namespace MessagesWebApi.Controllers
             if (s) {
                 if (hub.Clients.User(data.to) != null)
                 {
-                    //hub.Clients.User(data.to).SendAsync("ReceiveMessage");
                     hub.Clients.Group(data.to).SendAsync("ReceiveMessage");
                 }
                 return StatusCode(201); };
