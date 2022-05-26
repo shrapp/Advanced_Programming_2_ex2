@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react';
 import ContactsBar from './contacts/ContactsBar';
 import ChatBox from './chatbox/ChatBox'
 import { GetChat, GetContacts } from '../data/users'
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 function UserApp({ user }) {
 
     // add here a use State (maybe with ref) for updating user.
     const [did_data_change, set_did_data_change] = useState(false);
-    //useEffect(() => {
-    //    getContacts();
-    //}, [did_data_change])
 
     // this useState updates the contact that should be showd in the chat box
     const [displayedContact, setDisplayedContact] = useState(null);
@@ -17,6 +15,33 @@ function UserApp({ user }) {
     const [chat, setChat] = useState(null);
 
     const [contacts, setContacts] = useState(null);
+
+    const [connection, setConnection] = useState()
+
+    // join signalR
+    const joinHub = async (user) => {
+        try {
+            const connection = new HubConnectionBuilder()
+                .withUrl("http://localhost:5180/login")
+                .configureLogging(LogLevel.Information)
+                .build();
+
+            connection.on("ReceiveMessage", () => {
+                setDataChanged();
+            });
+
+            await connection.start();
+            await connection.invoke("Login", user)
+
+            setConnection(connection);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    useEffect(() => {
+        joinHub();
+    }, [])
 
     const changeDisplayedContact = async function (contact) {
         let mychat = await GetChat(user, contact)

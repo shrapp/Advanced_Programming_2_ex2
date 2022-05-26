@@ -71,6 +71,12 @@ namespace MessagesApp.Services
                 u1.Contacts = new List<Contact>();
                 _users.Add(u1);
 
+                User u2 = new User();
+                u2.Username = "bob";
+                u2.Password = "bob";
+                u2.Contacts = new List<Contact>();
+                _users.Add(u2);
+
                 Contact chat_0_1 = new Contact();
                 chat_0_1.User = u1.Username;
                 chat_0_1.Nickname = "alicia";
@@ -78,45 +84,80 @@ namespace MessagesApp.Services
                 chat_0_1.Server = "localhost:5180"; // not good, but for now
                 tester.Contacts.Add(chat_0_1);
 
-                Message message0 = new Message();
-                message0.Id = 0;
-                message0.Sent = true;
-                message0.Content = "hi you";
-                message0.Time = DateTime.Now;
-                message0.Type = "text";
+                Message message_0_1_1 = new Message();
+                message_0_1_1.Id = 0;
+                message_0_1_1.Sent = true;
+                message_0_1_1.Content = "hi you";
+                message_0_1_1.Time = DateTime.Now;
+                message_0_1_1.Type = "text";
 
-                chat_0_1.Messages.Add(message0);
+                chat_0_1.Messages.Add(message_0_1_1);
 
-                User u2 = new User();
-                u2.Username = "bob";
-                u2.Password = "bob";
-                u2.Contacts = new List<Contact>();
-                _users.Add(u2);
+                Contact chat_0_2 = new Contact();
+                chat_0_2.User = u2.Username;
+                chat_0_2.Nickname = "bobby";
+                chat_0_2.Messages = new List<Message>();
+                chat_0_2.Server = "localhost:5180"; // not good, but for now
+                tester.Contacts.Add(chat_0_2);
 
-                Contact chat_1_2 = new Contact();
-                chat_1_2.User = u2.Username;
-                chat_1_2.Nickname = "bobby";
-                chat_1_2.Messages = new List<Message>();
-                chat_1_2.Server = "localhost:5180"; // not good, but for now
-                tester.Contacts.Add(chat_1_2);
+                Message message_0_2_1 = new Message();
+                message_0_2_1.Id = 1;
+                message_0_2_1.Sent = true;
+                message_0_2_1.Content = "hi";
+                message_0_2_1.Time = DateTime.Now;
+                message_0_2_1.Type = "text";
 
-                Message message_1_2 = new Message();
-                message_1_2.Id = 1;
-                message_1_2.Sent = true;
-                message_1_2.Content = "hi";
-                message_1_2.Time = DateTime.Now;
-                message_1_2.Type = "text";
+                chat_0_2.Messages.Add(message_0_2_1);
 
-                chat_1_2.Messages.Add(message_1_2);
+                Message message_1_2_2 = new Message();
+                message_1_2_2.Id = 2;
+                message_1_2_2.Sent = false;
+                message_1_2_2.Content = "hi to you to";
+                message_1_2_2.Time = DateTime.Now;
+                message_1_2_2.Type = "text";
 
-                Message message_1_2_b = new Message();
-                message_1_2_b.Id = 1;
-                message_1_2_b.Sent = false;
-                message_1_2_b.Content = "hi to you to";
-                message_1_2_b.Time = DateTime.Now;
-                message_1_2_b.Type = "text";
+                chat_0_2.Messages.Add(message_1_2_2);
 
-                chat_1_2.Messages.Add(message_1_2_b);
+                Contact chat_2_0 = new Contact();
+                chat_2_0.User = tester.Username;
+                chat_2_0.Nickname = "11";
+                chat_2_0.Messages = new List<Message>();
+                chat_2_0.Server = "localhost:5180";
+                u2.Contacts.Add(chat_2_0);
+
+                Message message_2_0_1 = new Message();
+                message_2_0_1.Id = 1;
+                message_2_0_1.Sent = false;
+                message_2_0_1.Content = "hi";
+                message_2_0_1.Time = DateTime.Now;
+                message_2_0_1.Type = "text";
+
+                chat_2_0.Messages.Add(message_2_0_1);
+
+                Message message_2_0_2 = new Message();
+                message_2_0_2.Id = 2;
+                message_2_0_2.Sent = true;
+                message_2_0_2.Content = "hi to you to";
+                message_2_0_2.Time = DateTime.Now;
+                message_2_0_2.Type = "text";
+
+                chat_2_0.Messages.Add(message_2_0_2);
+
+                Contact chat_1_0 = new Contact();
+                chat_1_0.User = tester.Username;
+                chat_1_0.Nickname = "111";
+                chat_1_0.Messages = new List<Message>();
+                chat_1_0.Server = "localhost:5180";
+                u1.Contacts.Add(chat_1_0);
+
+                Message message_1_0_1 = new Message();
+                message_1_0_1.Id = 0;
+                message_1_0_1.Sent = false;
+                message_1_0_1.Content = "hi you";
+                message_1_0_1.Time = DateTime.Now;
+                message_1_0_1.Type = "text";
+
+                chat_1_0.Messages.Add(message_1_0_1);
             }
         }
         public int ApiLogin(string username, string pass)

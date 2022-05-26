@@ -15,7 +15,7 @@ function ContactItem({ Contact, setDisplayedContact }) {
             <div className="contacts_content">
                 <div className="contacts_spaces">
                     <span className="fs-5 name_in_chat_list col-sm-10">{Contact.name}</span>
-                    <span className="hour_and_time col-sm-2">{formatDateTime(new Date(Contact.lastdate))}</span>
+                    <span className="hour_and_time col-sm-2">{Contact.lastdate != null ?formatDateTime(new Date(Contact.lastdate)) : ''}</span>
                 </div>
                 <span className="contacts_spaces message_preview"
                     title={Contact.last}>{Contact.last}</span>

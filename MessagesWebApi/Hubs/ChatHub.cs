@@ -6,8 +6,13 @@ namespace MessagesWebApi.Hubs
 {
     public class ChatHub : Hub
     {
-        private readonly string _botUser;
-        private static readonly IDictionary<string, string> _connections;
+        //private readonly string _botUser;
+        private readonly IDictionary<string, string> _connections;
+
+        public ChatHub(IDictionary<string, string> conn)
+        {
+            _connections = conn;
+        }
 
 
         public override Task OnDisconnectedAsync(Exception exception)
@@ -23,18 +28,21 @@ namespace MessagesWebApi.Hubs
         public async Task Login(string user)
         {
             _connections[Context.ConnectionId] = user;
-
         }
 
-        public async Task ReceiveMessage(string user)
+        public async Task ReceiveMessage()
         {
-            await Clients.User(user).SendAsync("ReceiveMessage");
+            if (_connections.TryGetValue(Context.ConnectionId, out string user))
+            {
+                //await Clients.User(user).SendAsync("ReceiveMessage");
+                await Clients.All.SendAsync("ReceiveMessage");
+            }
         }
 
-        public async Task ReceiveContact(string from, string to)
-        {
-            await Clients.User(from).SendAsync("ReceiveContact", to);
-        }
+        //public async Task ReceiveContact(string from, string to)
+        //{
+        //    await Clients.User(from).SendAsync("ReceiveContact", to);
+        //}
 
 
 

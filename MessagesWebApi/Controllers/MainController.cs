@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MessagesApp.Services;
 using MessagesApp.Models;
 using System.Web.Http.Cors;
-using Microsoft.AspNet.SignalR;
+using Microsoft.AspNetCore.SignalR;
 using MessagesWebApi.Hubs;
 
 namespace MessagesWebApi.Controllers
@@ -13,9 +13,13 @@ namespace MessagesWebApi.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class MainController : ControllerBase
     {
-        private static IHubContext<ChatHub> hub;
+        private readonly IHubContext<ChatHub> hub;
         private static AppService service = AppService.CreateAppService();
 
+        public MainController(IHubContext<ChatHub> hubContext)
+        {
+            this.hub = hubContext;
+        }
 
         public class LoginFormat
         {
@@ -115,7 +119,8 @@ namespace MessagesWebApi.Controllers
             contact.Name = data.from;
             bool s = service.ApiAddContact(data.to, contact);
             if (s) {
-                hub.Clients.User(data.to).ReceiveContact(data.from, data.to);
+                hub.Clients.All.SendAsync("ReceiveMessage");
+ //               hub.Clients.User(data.to).SendAsync("ReceiveContact");
                 return StatusCode(201); 
             };
             return BadRequest();
@@ -126,7 +131,11 @@ namespace MessagesWebApi.Controllers
         {
             bool s = service.ApiAddMessage(data.to, data.from, data.content, false);
             if (s) {
-                hub.Clients.User(data.to).ReceiveMessage(data.to);
+                if (hub.Clients.User(data.to) != null)
+                {
+                    //hub.Clients.User(data.to).SendAsync("ReceiveMessage");
+                    hub.Clients.All.SendAsync("ReceiveMessage");
+                }
                 return StatusCode(201); };
             return BadRequest();
         }

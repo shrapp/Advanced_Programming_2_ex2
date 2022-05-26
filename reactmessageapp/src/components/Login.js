@@ -1,52 +1,22 @@
 import React, { useRef, useState } from "react";
 import { FindUser, VerifyPassword } from "../data/users";
-import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 // this is only a basic screen, to see things can work
-function Login({setUser, setRegister}) {
+function Login({ setUser, setRegister }) {
 
     const usernameTextBox = useRef(null)
     const passwordTextBox = useRef(null)
     const [errors, setErrors] = useState([])
-    const [connection, setConnection] = useState()
-
-    const joinHub = async (user) => {
-        try {
-            const connection = new HubConnectionBuilder()
-                .withUrl("http://localhost:5180/login")
-                .configureLogging(LogLevel.Information)
-                .build();
-            
-            connection.on("ReceiveMessage", () => {
-                console.log("signalR")
-            });
-
-            connection.on("ReceiveContact", (user) => {
-                console.log("signalR"+ user)
-            });
-
-            await connection.start();
-            
-            setConnection(connection);
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
-
-
 
     const login = async function(e){
         e.preventDefault();
         let tempErr = [];
         const userName = usernameTextBox.current.value;
 
-
- 
         if (await FindUser(userName)){
             if (await VerifyPassword(userName, passwordTextBox.current.value)) {
                 setUser(userName);
-                joinHub(userName);
+            //    joinHub(userName);
             }
             else
                 tempErr.push('wrong password')
