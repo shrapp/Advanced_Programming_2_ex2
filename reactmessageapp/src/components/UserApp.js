@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ContactsBar from './contacts/ContactsBar';
 import ChatBox from './chatbox/ChatBox'
 import { GetChat, GetContacts } from '../data/users'
@@ -11,6 +11,10 @@ function UserApp({ user }) {
 
     // this useState updates the contact that should be showd in the chat box
     const [displayedContact, setDisplayedContact] = useState(null);
+
+    const stateRef = useRef();
+
+    stateRef.current = displayedContact;
 
     const [chat, setChat] = useState(null);
 
@@ -50,8 +54,8 @@ function UserApp({ user }) {
     }
 
     const setDataChanged = async function (c) {
-        if (displayedContact != null)
-            await changeDisplayedContact(displayedContact);
+        if (stateRef.current != null)
+            await changeDisplayedContact(stateRef.current);
         let myContacts = await GetContacts(user);
         setContacts(myContacts);
         set_did_data_change(!did_data_change);
