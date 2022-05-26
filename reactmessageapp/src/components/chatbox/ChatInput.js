@@ -18,7 +18,7 @@ function ChatInput({submitNewMessage}) {
 	
 	const [fileUploaded, setFileUploaded] = useState(null);	
 	const [showAttach, setShowAttach] = useState(false);
-	const [newMessage, setNewMessage] = useState("");
+	const [newMessage, setNewMessage] = useState();
 	const [messageType, setMessageType] = useState("text")
 
 	const { recorderState, ...handlers } = useRecorder({setFileUploaded});
@@ -54,7 +54,7 @@ function ChatInput({submitNewMessage}) {
 	const detectEnterPress = (e) => {
 		if (e.key === "Enter" || e.keyCode === 13) {
 			e.preventDefault();
-			if (messageType === 'text') {
+			if (messageType === 'text' && (newMessage.length > 0) ) {
 				submitNewMessage(messageType, newMessage);
 				setNewMessage('');
 			} 

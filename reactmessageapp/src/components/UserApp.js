@@ -31,7 +31,7 @@ function UserApp({ user }) {
             });
 
             await connection.start();
-            await connection.invoke("Login", user)
+            await connection.invoke("Login", user )
 
             setConnection(connection);
         } catch (e) {
@@ -40,7 +40,7 @@ function UserApp({ user }) {
     }
 
     useEffect(() => {
-        joinHub();
+        joinHub(user);
     }, [])
 
     const changeDisplayedContact = async function (contact) {

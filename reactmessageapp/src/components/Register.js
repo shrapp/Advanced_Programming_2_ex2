@@ -36,8 +36,7 @@ function Register({setUser, setRegister}) {
         //if (!validateNickname(nickName))
             //isErr = true;
         if (!isErr) {
-            const tes = await AddUser(userName, password, no_image);
-            console.log(tes);
+            await AddUser(userName, password, no_image);
             setRegister(false);
             setUser(userName);
         }

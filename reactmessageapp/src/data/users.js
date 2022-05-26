@@ -184,16 +184,35 @@ export async function GetChat(myId, contact){
 
 export async function AddContactToUser(user, newContact, nickname, contactServer){
     let ret;
-    const requestOptions = {
+
+    let requestOptions = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'accept': '*/*',
         },
-        body: JSON.stringify({ id: newContact, name: nickname, server: contactServer })
+        body: JSON.stringify({
+            from: user, to: newContact, server: 'localhost:5180'
+        })
     };
-    await fetch('http://localhost:5180/api/contacts?user='+user, requestOptions)
+    await fetch('http://' + contactServer + '/api/invitations', requestOptions)
         .then(response => ret = response.status);
+    
+    if (ret != 201) return false;
+
+     requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'accept': '*/*',
+        },
+        body: JSON.stringify({
+            id: newContact, name: nickname, server: contactServer
+        })
+    };
+    await fetch('http://localhost:5180/api/contacts/?=' + user, requestOptions)
+        .then(response => ret = response.status);
+
     return ret == 201
 }
 
